@@ -48,18 +48,18 @@ const FALLBACK: BannerSettings = {
   is_visible: true,
   badge_label: "سوبر ماركت أونلاين",
   badge_title: "Zone Mart",
-  hero_title: "كل اللي محتاجه",
-  hero_highlight: "يوصلك",
-  hero_subtitle: "اطلب احتياجاتك اليومية وهتوصلك لحد باب بيتك في أسرع وقت.",
+  hero_title: "كل طلبات البيت",
+  hero_highlight: "بأوفر الأسعار",
+  hero_subtitle: "آنست ووفّرت — اطلب احتياجاتك وهتوصلك لحد باب بيتك.",
   features: [
-    { icon: "Truck", title: "توصيل في مواعيده", desc: "تغطية لمحافظات الدلتا والقاهرة الكبرى" },
-    { icon: "Receipt", title: "فاتورة ضريبية معتمدة", desc: "متوافقة مع مصلحة الضرائب المصرية" },
-    { icon: "ShieldCheck", title: "موردين معتمدين", desc: "تعامل مع موردين ووكلاء رسميين فقط" },
+    { icon: "Truck", title: "توصيل سريع", desc: "توصيل لحد بيتك في أسرع وقت" },
+    { icon: "Receipt", title: "أسعار مميزة", desc: "وفّر أكتر مع عروضنا اليومية" },
+    { icon: "ShieldCheck", title: "منتجات طازة", desc: "جودة مضمونة من أفضل الموردين" },
   ],
   stats: [
-    { value: "12K+", label: "منتج" },
-    { value: "450+", label: "مورد معتمد" },
-    { value: "8K+", label: "تاجر شريك" },
+    { value: "5K+", label: "منتج" },
+    { value: "3", label: "فروع" },
+    { value: "10K+", label: "عميل سعيد" },
   ],
 };
 

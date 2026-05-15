@@ -121,13 +121,10 @@ function AccountPage() {
             <p className="text-sm text-muted-foreground">جاري التحميل…</p>
           ) : (
             <>
-              <Field icon={Store} label="اسم المحل / المؤسسة">
-                <input value={shopName} onChange={(e) => setShopName(e.target.value)} placeholder="مثلاً: سوبرماركت النور" className="input" />
+              <Field icon={UserIcon} label="الاسم">
+                <input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="اسمك بالكامل" className="input" />
               </Field>
-              <Field icon={UserIcon} label="اسم صاحب المحل">
-                <input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="الاسم بالكامل" className="input" />
-              </Field>
-              <Field icon={Phone} label="رقم التليفون *">
+              <Field icon={Phone} label="رقم الموبايل *">
                 <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01xxxxxxxxx" inputMode="tel" dir="ltr" className="input" />
               </Field>
               <Field icon={Building2} label="المحافظة *">
