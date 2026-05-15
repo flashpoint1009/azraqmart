@@ -46,21 +46,13 @@ type BannerSettings = {
 
 const FALLBACK: BannerSettings = {
   is_visible: true,
-  badge_label: "سوبر ماركت أونلاين",
-  badge_title: "Zone Mart",
-  hero_title: "كل طلبات البيت",
-  hero_highlight: "بأوفر الأسعار",
-  hero_subtitle: "آنست ووفّرت — اطلب احتياجاتك وهتوصلك لحد باب بيتك.",
-  features: [
-    { icon: "Truck", title: "توصيل سريع", desc: "توصيل لحد بيتك في أسرع وقت" },
-    { icon: "Receipt", title: "أسعار مميزة", desc: "وفّر أكتر مع عروضنا اليومية" },
-    { icon: "ShieldCheck", title: "منتجات طازة", desc: "جودة مضمونة من أفضل الموردين" },
-  ],
-  stats: [
-    { value: "5K+", label: "منتج" },
-    { value: "3", label: "فروع" },
-    { value: "10K+", label: "عميل سعيد" },
-  ],
+  badge_label: "",
+  badge_title: "",
+  hero_title: "",
+  hero_highlight: "",
+  hero_subtitle: "",
+  features: [],
+  stats: [],
 };
 
 function LoginPage() {
@@ -252,7 +244,7 @@ function LoginPage() {
           <div className="w-full max-w-sm animate-float-up rounded-3xl bg-white/15 dark:bg-white/10 backdrop-blur-2xl backdrop-saturate-150 border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-4 sm:p-6 lg:bg-transparent lg:border-0 lg:shadow-none lg:backdrop-blur-none lg:p-0 lg:rounded-none lg:max-w-md">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-2 px-3 py-1 text-[11px] font-bold text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-              سوبر ماركت أونلاين
+              {banner.badge_label}
             </div>
             <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               {mode === "login" ? "أهلاً بيك" : "اعمل حساب جديد"}
