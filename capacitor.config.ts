@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.azraq.market",
-  appName: "أزرق ماركت",
+  appId: "com.zonemart.app",
+  appName: "Zone Mart",
   webDir: "dist",
 
   // 👇 حط الـ Production URL بتاعك هنا بعد الـ deploy

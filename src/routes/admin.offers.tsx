@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/offers")({
-  head: () => ({ meta: [{ title: "العروض والكوبونات — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "العروض والكوبونات — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer", "accountant"]}>
       <OffersPage />
@@ -83,7 +83,7 @@ function OffersPage() {
       <StaffNav />
       <main className="mx-auto max-w-[1200px] px-4 py-6 lg:px-6 lg:py-8">
         <header className="mb-6 text-end">
-          <p className="text-xs font-bold text-primary">أزرق ماركت</p>
+          <p className="text-xs font-bold text-primary">Zone Mart</p>
           <h1 className="font-display text-3xl font-bold mt-1">العروض والكوبونات</h1>
           <p className="text-sm text-muted-foreground mt-1">أنشئ كوبونات خصم يكتبها العميل في السلة.</p>
         </header>

@@ -19,7 +19,7 @@ import { isFeatureEnabled } from "@/lib/features";
 import { useUserRoles } from "@/hooks/useUserRoles";
 
 export const Route = createFileRoute("/admin/chatbot")({
-  head: () => ({ meta: [{ title: "روبوت الدردشة — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "روبوت الدردشة — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer"]}>
       <Page />

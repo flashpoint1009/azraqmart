@@ -4,8 +4,8 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   const { settings } = useAppSettings();
-  const name = settings?.app_name || "أزرق ماركت";
-  const slogan = settings?.app_slogan || "طلباتك أوامر";
+  const name = settings?.app_name || "Zone Mart";
+  const slogan = settings?.app_slogan || "طلباتك توصلك";
   const src = settings?.logo_url || logoMark;
 
   return (

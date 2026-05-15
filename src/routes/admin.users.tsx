@@ -6,7 +6,7 @@ import { RoleGuard } from "@/components/RoleGuard";
 import { UsersManager } from "@/components/UsersManager";
 
 export const Route = createFileRoute("/admin/users")({
-  head: () => ({ meta: [{ title: "إدارة الموظفين — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "إدارة الموظفين — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer"]}>
       <Page />

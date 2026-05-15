@@ -114,7 +114,7 @@ function PushPage() {
                 <Smartphone className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-muted-foreground font-bold">أزرق ماركت • الآن</p>
+                <p className="text-[10px] text-muted-foreground font-bold">Zone Mart • الآن</p>
                 <p className="font-display font-bold text-sm mt-0.5">{title || "عنوان الإشعار"}</p>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{body || "محتوى الإشعار سيظهر هنا..."}</p>
               </div>

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/debts")({
-  head: () => ({ meta: [{ title: "المديونيات — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "المديونيات — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer", "accountant"]}>
       <DebtsPage />
@@ -119,7 +119,7 @@ function DebtsPage() {
           </Button>
           <div className="text-end">
             <p className="text-xs font-bold text-primary inline-flex items-center gap-1.5">
-              <Wallet className="h-3.5 w-3.5" /> أزرق ماركت
+              <Wallet className="h-3.5 w-3.5" /> Zone Mart
             </p>
             <h1 className="font-display text-3xl font-bold mt-1">المديونيات</h1>
             <p className="text-sm text-muted-foreground mt-1">متابعة ديون العملاء وتسجيل المدفوعات.</p>

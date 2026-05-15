@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/live-tracking")({
-  head: () => ({ meta: [{ title: "تتبّع المندوبين المباشر — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "تتبّع المندوبين المباشر — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer"]}>
       <Page />

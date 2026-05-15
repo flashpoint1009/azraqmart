@@ -13,7 +13,7 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { isFeatureEnabled } from "@/lib/features";
 
 export const Route = createFileRoute("/admin/orders")({
-  head: () => ({ meta: [{ title: "الطلبات — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "الطلبات — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer", "accountant", "warehouse"]}>
       <AdminOrdersPage />
@@ -108,7 +108,7 @@ function AdminOrdersPage() {
             <Download className="h-3.5 w-3.5" /> تصدير CSV
           </Button>
           <div className="text-end">
-            <p className="text-xs font-bold text-primary">أزرق ماركت</p>
+            <p className="text-xs font-bold text-primary">Zone Mart</p>
             <h1 className="font-display text-3xl font-bold mt-1">الطلبات</h1>
             <p className="text-sm text-muted-foreground mt-1">{filtered.length} طلب من {orders.length}</p>
           </div>

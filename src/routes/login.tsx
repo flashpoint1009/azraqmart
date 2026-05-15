@@ -13,10 +13,10 @@ import warehouseHero from "@/assets/warehouse-hero.jpg";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — أزرق ماركت" },
-      { name: "description", content: "ادخل إلى حساب تاجر الجملة الخاص بك على أزرق ماركت لمتابعة طلباتك وعروضك الحصرية." },
-      { property: "og:title", content: "تسجيل الدخول — أزرق ماركت" },
-      { property: "og:description", content: "ادخل إلى حسابك على أزرق ماركت لمتابعة طلبات الجملة." },
+      { title: "تسجيل الدخول — Zone Mart" },
+      { name: "description", content: "سجّل دخولك على Zone Mart عشان تطلب احتياجاتك وتتابع طلباتك." },
+      { property: "og:title", content: "تسجيل الدخول — Zone Mart" },
+      { property: "og:description", content: "سجّل دخولك على Zone Mart وابدأ تسوّق." },
       { property: "og:url", content: "https://azraqmart.lovable.app/login" },
       { property: "og:type", content: "website" },
     ],
@@ -46,11 +46,11 @@ type BannerSettings = {
 
 const FALLBACK: BannerSettings = {
   is_visible: true,
-  badge_label: "منصة موردين معتمدين",
-  badge_title: "أزرق ماركت",
-  hero_title: "شريكك في تجارة",
-  hero_highlight: "الجملة",
-  hero_subtitle: "نوفّر لتجار الجملة كتالوج منظّم، أسعار واضحة، وتسليم في مواعيده.",
+  badge_label: "سوبر ماركت أونلاين",
+  badge_title: "Zone Mart",
+  hero_title: "كل اللي محتاجه",
+  hero_highlight: "يوصلك",
+  hero_subtitle: "اطلب احتياجاتك اليومية وهتوصلك لحد باب بيتك في أسرع وقت.",
   features: [
     { icon: "Truck", title: "توصيل في مواعيده", desc: "تغطية لمحافظات الدلتا والقاهرة الكبرى" },
     { icon: "Receipt", title: "فاتورة ضريبية معتمدة", desc: "متوافقة مع مصلحة الضرائب المصرية" },

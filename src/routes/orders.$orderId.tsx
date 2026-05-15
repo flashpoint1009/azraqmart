@@ -19,7 +19,7 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/orders/$orderId")({
-  head: () => ({ meta: [{ title: "تفاصيل الطلب — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "تفاصيل الطلب — Zone Mart" }] }),
   component: OrderDetailPage,
 });
 
@@ -146,7 +146,7 @@ function OrderDetailPage() {
       )
       .join("\n");
     const message = [
-      `${settings?.app_name || "أزرق ماركت"}`,
+      `${settings?.app_name || "Zone Mart"}`,
       `فاتورة طلب #${order.order_number}`,
       customer?.shop_name ? `العميل: ${customer.shop_name}` : null,
       customer?.phone ? `الهاتف: ${customer.phone}` : null,

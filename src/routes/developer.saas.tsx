@@ -14,7 +14,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/developer/saas")({
-  head: () => ({ meta: [{ title: "لوحة التحكم — المطوّر — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "لوحة التحكم — المطوّر — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["developer"]}>
       <Page />

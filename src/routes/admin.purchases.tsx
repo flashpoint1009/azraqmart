@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/purchases")({
-  head: () => ({ meta: [{ title: "المشتريات — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "المشتريات — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer", "accountant"]}>
       <PurchasesPage />
@@ -31,7 +31,7 @@ function PurchasesPage() {
         <header className="mb-6 flex items-start justify-between gap-3">
           <Button asChild variant="outline" size="sm" className="gap-1.5"><Link to="/admin"><ArrowRight className="h-3.5 w-3.5" />رجوع</Link></Button>
           <div className="text-end">
-            <p className="text-xs font-bold text-primary">أزرق ماركت</p>
+            <p className="text-xs font-bold text-primary">Zone Mart</p>
             <h1 className="font-display text-3xl font-bold mt-1">المشتريات</h1>
             <p className="text-sm text-muted-foreground mt-1">سجّل فواتير الشراء والمرتجعات مع تحديث المخزون.</p>
           </div>

@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { GOVERNORATES, REGIONS } from "@/lib/regions";
 
 export const Route = createFileRoute("/account")({
-  head: () => ({ meta: [{ title: "حسابي — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "حسابي — Zone Mart" }] }),
   component: AccountPage,
 });
 

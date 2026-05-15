@@ -12,10 +12,10 @@ type ProductsSearch = { category?: string; sub?: string; q?: string };
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "المنتجات — أزرق ماركت" },
-      { name: "description", content: "تصفّح كتالوج أزرق ماركت لمنتجات الجملة: بقالة، مشروبات، منظفات، عناية شخصية، ألبان ومجمدات بأسعار جملة وتوصيل سريع." },
-      { property: "og:title", content: "كتالوج المنتجات — أزرق ماركت" },
-      { property: "og:description", content: "أحدث منتجات الجملة بأسعار تنافسية لتجار وأصحاب المحلات في مصر." },
+      { title: "المنتجات — Zone Mart" },
+      { name: "description", content: "تصفّح منتجات Zone Mart: بقالة، مشروبات، منظفات، عناية شخصية، ألبان ومجمدات بأسعار مميزة وتوصيل سريع." },
+      { property: "og:title", content: "تسوّق المنتجات — Zone Mart" },
+      { property: "og:description", content: "أحدث المنتجات بأسعار مميزة مع توصيل سريع لحد بيتك." },
       { property: "og:url", content: "https://azraqmart.lovable.app/products" },
       { property: "og:type", content: "website" },
     ],
@@ -28,9 +28,9 @@ export const Route = createFileRoute("/products")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "كتالوج منتجات أزرق ماركت",
+          name: "منتجات Zone Mart",
           url: "https://azraqmart.lovable.app/products",
-          description: "كتالوج منتجات الجملة في أزرق ماركت.",
+          description: "تسوّق منتجاتك اليومية من Zone Mart.",
         }),
       },
     ],

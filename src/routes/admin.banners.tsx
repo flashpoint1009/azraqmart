@@ -19,7 +19,7 @@ import { Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/banners")({
   head: () => ({
-    meta: [{ title: "إدارة البانرز — أزرق ماركت" }, { name: "robots", content: "noindex, nofollow" }],
+    meta: [{ title: "إدارة البانرز — Zone Mart" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: BannersPage,
 });
@@ -207,7 +207,7 @@ function LoginBannerEditor() {
 
       <div className="grid gap-3">
         <Field label="نص الشارة العلوية" value={form.badge_label} onChange={(v) => setForm((f) => ({ ...f, badge_label: v }))} placeholder="مثلاً: منصة موردين معتمدين" />
-        <Field label="اسم الشارة" value={form.badge_title} onChange={(v) => setForm((f) => ({ ...f, badge_title: v }))} placeholder="مثلاً: أزرق ماركت" />
+        <Field label="اسم الشارة" value={form.badge_title} onChange={(v) => setForm((f) => ({ ...f, badge_title: v }))} placeholder="مثلاً: Zone Mart" />
         <Field label="العنوان الرئيسي" value={form.hero_title} onChange={(v) => setForm((f) => ({ ...f, hero_title: v }))} placeholder="مثلاً: شريكك في تجارة" />
         <Field label="الكلمة المميزة" value={form.hero_highlight} onChange={(v) => setForm((f) => ({ ...f, hero_highlight: v }))} placeholder="مثلاً: الجملة" />
         <div>

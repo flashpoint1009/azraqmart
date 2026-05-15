@@ -13,10 +13,10 @@ import { useUserRoles, ROLE_HOME } from "@/hooks/useUserRoles";
 export const Route = createFileRoute("/account/password")({
   head: () => ({
     meta: [
-      { title: "تغيير كلمة المرور — أزرق ماركت" },
-      { name: "description", content: "حدّث كلمة مرور حسابك في أزرق ماركت لحماية بيانات تجارتك ومعاملاتك." },
-      { property: "og:title", content: "تغيير كلمة المرور — أزرق ماركت" },
-      { property: "og:description", content: "حدّث كلمة المرور لحسابك في أزرق ماركت." },
+      { title: "تغيير كلمة المرور — Zone Mart" },
+      { name: "description", content: "حدّث كلمة مرور حسابك في Zone Mart لحماية بيانات تجارتك ومعاملاتك." },
+      { property: "og:title", content: "تغيير كلمة المرور — Zone Mart" },
+      { property: "og:description", content: "حدّث كلمة المرور لحسابك في Zone Mart." },
       { property: "og:url", content: "https://azraqmart.lovable.app/account/password" },
       { property: "og:type", content: "website" },
       { name: "robots", content: "noindex, nofollow" },

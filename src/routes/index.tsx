@@ -50,10 +50,10 @@ const FALLBACK_CATEGORY_IMAGES = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "أزرق ماركت — منصة تجار الجملة في مصر" },
-      { name: "description", content: "أزرق ماركت: منصة B2B متكاملة لتجار الجملة. اطلب البقالة والمنظفات والمشروبات بأسعار الجملة وتسليم خلال 24 ساعة." },
-      { property: "og:title", content: "أزرق ماركت — منصة تجار الجملة في مصر" },
-      { property: "og:description", content: "اطلب منتجات الجملة بأسعار تنافسية مع توصيل سريع لكل المحافظات." },
+      { title: "Zone Mart — تسوّق واطلب توصيل لحد بيتك" },
+      { name: "description", content: "Zone Mart: سوبر ماركت أونلاين. اطلب البقالة والمنظفات والمشروبات بأسعار مميزة وتوصيل سريع لحد باب بيتك." },
+      { property: "og:title", content: "Zone Mart — تسوّق واطلب توصيل لحد بيتك" },
+      { property: "og:description", content: "اطلب احتياجاتك اليومية بأسعار مميزة مع توصيل سريع." },
       { property: "og:url", content: "https://azraqmart.lovable.app/" },
       { property: "og:type", content: "website" },
     ],
@@ -66,8 +66,8 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "أزرق ماركت",
-          alternateName: "Azraq Market",
+          name: "Zone Mart",
+          alternateName: "Zone Mart",
           url: "https://azraqmart.lovable.app/",
           logo: "https://azraqmart.lovable.app/icon-512.png",
           description: "منصة B2B متكاملة لتجار الجملة في مصر.",
@@ -78,7 +78,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "أزرق ماركت",
+          name: "Zone Mart",
           url: "https://azraqmart.lovable.app/",
           inLanguage: "ar",
         }),
@@ -226,7 +226,7 @@ function HomePage() {
             >
               <img
                 src={heroImg}
-                alt="مستودع أزرق ماركت لتجارة الجملة"
+                alt="Zone Mart - توصيل طلباتك"
                 width={1920}
                 height={1080}
                 fetchPriority="high"
@@ -239,7 +239,7 @@ function HomePage() {
               <div className="relative p-4 sm:p-6 text-primary-foreground">
                 <div className="flex items-center gap-3">
                   <div className="grid h-14 w-14 sm:h-16 sm:w-16 place-items-center rounded-2xl bg-white/95 backdrop-blur-md border border-white/40 shadow-lg ring-2 ring-white/20 overflow-hidden shrink-0">
-                    <img src={logoSrc} alt="شعار أزرق ماركت" className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+                    <img src={logoSrc} alt="Zone Mart" className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm font-bold opacity-95 inline-flex items-center gap-1.5">
@@ -513,9 +513,9 @@ function AboutSection() {
   if (about && about.is_visible === false) return null;
 
   const eyebrow = about?.eyebrow?.trim() || "عننا";
-  const title = about?.title?.trim() || "أزرق ماركت — شريكك في تجارة الجملة";
+  const title = about?.title?.trim() || "Zone Mart — كل اللي محتاجه يوصلك";
   const description = about?.description?.trim()
-    || "بنوصّل لتجار الجملة وأصحاب البقالات أفضل المنتجات بأسعار تنافسية، مع خدمة توصيل سريعة وضمان جودة.";
+    || "بنوصّلك كل احتياجاتك اليومية من بقالة ومنظفات ومشروبات لحد باب بيتك. أسعار مميزة وتوصيل سريع.";
   const ctaLabel = about?.cta_label?.trim() || "تسوّق الآن";
   const ctaLink = about?.cta_link?.trim() || "/products";
   const stats = about?.stats?.length ? about.stats : [];

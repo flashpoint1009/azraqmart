@@ -11,9 +11,9 @@ import loginShot from "@/assets/portfolio/login.png";
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
     meta: [
-      { title: "بورتفوليو — أزرق ماركت | منصة B2B متكاملة" },
-      { name: "description", content: "بورتفوليو احترافي يعرض كل تفاصيل منصة أزرق ماركت: الفيتشرز، التقنيات، لقطات حقيقية من النظام، وأكثر." },
-      { property: "og:title", content: "بورتفوليو أزرق ماركت" },
+      { title: "بورتفوليو — Zone Mart | منصة B2B متكاملة" },
+      { name: "description", content: "بورتفوليو احترافي يعرض كل تفاصيل منصة Zone Mart: الفيتشرز، التقنيات، لقطات حقيقية من النظام، وأكثر." },
+      { property: "og:title", content: "بورتفوليو Zone Mart" },
       { property: "og:description", content: "منصة B2B متكاملة لتجار الجملة في مصر — كل التفاصيل في صفحة واحدة." },
       { property: "og:url", content: "https://azraqmart.lovable.app/portfolio" },
     ],
@@ -121,7 +121,7 @@ function PortfolioPage() {
                 <Sparkles className="h-3.5 w-3.5" /> منصة B2B متكاملة • Case Study
               </span>
               <h1 className="font-display mt-4 text-4xl font-black leading-tight md:text-6xl">
-                أزرق ماركت
+                Zone Mart
                 <span className="block bg-gradient-to-l from-primary via-accent to-primary bg-clip-text text-transparent">
                   منصة جملة كاملة في تطبيق واحد
                 </span>
@@ -150,7 +150,7 @@ function PortfolioPage() {
             </div>
             <div className="relative">
               <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-tr from-primary/30 via-accent/20 to-transparent blur-3xl" />
-              <BrowserFrame src={homeShot} alt="الصفحة الرئيسية لأزرق ماركت" />
+              <BrowserFrame src={homeShot} alt="الصفحة الرئيسية لZone Mart" />
             </div>
           </div>
         </div>
@@ -256,7 +256,7 @@ function PortfolioPage() {
       </section>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} أزرق ماركت — كل الحقوق محفوظة
+        © {new Date().getFullYear()} Zone Mart — كل الحقوق محفوظة
       </footer>
     </div>
   );

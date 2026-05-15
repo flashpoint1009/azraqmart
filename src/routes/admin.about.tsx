@@ -17,7 +17,7 @@ import { usePermissions } from "@/hooks/usePermissions";
 
 export const Route = createFileRoute("/admin/about")({
   head: () => ({
-    meta: [{ title: "إدارة قسم عننا — أزرق ماركت" }, { name: "robots", content: "noindex, nofollow" }],
+    meta: [{ title: "إدارة قسم عننا — Zone Mart" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: AboutAdminPage,
 });

@@ -12,7 +12,7 @@ import { ImageUpload } from "@/components/ImageUpload";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/products")({
-  head: () => ({ meta: [{ title: "المنتجات — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "المنتجات — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer", "accountant"]}>
       <AdminProducts />
@@ -115,7 +115,7 @@ function AdminProducts() {
       <StaffNav />
       <main className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6 lg:py-8">
         <header className="mb-6 text-end">
-          <p className="text-xs font-bold text-primary inline-flex items-center gap-1.5"><Package className="h-3.5 w-3.5" />أزرق ماركت</p>
+          <p className="text-xs font-bold text-primary inline-flex items-center gap-1.5"><Package className="h-3.5 w-3.5" />Zone Mart</p>
           <h1 className="font-display text-3xl font-bold mt-1">المنتجات</h1>
           <p className="text-sm text-muted-foreground mt-1">{filtered.length} منتج · ضيف وعدّل بالصور والأسعار والمخزون.</p>
         </header>
