@@ -221,7 +221,7 @@ function HomePage() {
               ref={heroRef}
               onMouseMove={onHeroMove}
               onMouseLeave={onHeroLeave}
-              className="group relative overflow-hidden rounded-2xl shadow-soft animate-fade-in min-h-[178px] sm:min-h-[260px]"
+              className="group relative overflow-hidden rounded-2xl shadow-soft animate-fade-in min-h-[200px] sm:min-h-[300px]"
               style={{ ["--mx" as any]: "0px", ["--my" as any]: "0px" }}
             >
               <img
@@ -280,7 +280,7 @@ function HomePage() {
               عرض الكل <ArrowLeft className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <div className="flex gap-2 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-6 md:mx-0 md:px-0 md:overflow-visible md:gap-3">
+          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:mx-0 md:px-0 md:overflow-visible md:gap-4">
             {mainCategories.map((c, i) => {
               const categoryImage = c.image_url || CATEGORY_IMAGES[c.name] || FALLBACK_CATEGORY_IMAGES[i % FALLBACK_CATEGORY_IMAGES.length];
               return (
@@ -288,12 +288,12 @@ function HomePage() {
                   key={c.id}
                   to="/products"
                   search={{ category: c.id } as never}
-                  className="group relative overflow-hidden rounded-xl border border-border bg-card w-[96px] sm:w-[110px] aspect-square shrink-0 snap-start transition-all hover:shadow-elevated hover:border-primary md:w-auto"
+                  className="group relative overflow-hidden rounded-2xl border border-border bg-card w-[130px] sm:w-[150px] aspect-[4/5] shrink-0 snap-start transition-all hover:shadow-elevated hover:border-primary md:w-auto"
                   style={{ animationDelay: `${i * 60}ms` }}
                 >
-                  <img src={categoryImage} alt={c.name} loading="lazy" width={768} height={768} className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <span className="absolute inset-x-1 bottom-1 z-10 text-[10px] sm:text-xs font-bold text-white drop-shadow text-center leading-tight line-clamp-2">{c.name}</span>
+                  <img src={categoryImage} alt={c.name} loading="lazy" width={768} height={768} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <span className="absolute inset-x-2 bottom-2 z-10 text-xs sm:text-sm font-bold text-white drop-shadow text-center leading-tight line-clamp-2">{c.name}</span>
                 </Link>
               );
             })}
@@ -400,7 +400,7 @@ function InteractiveBanner({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="group relative overflow-hidden rounded-2xl shadow-soft animate-fade-in min-h-[110px] sm:min-h-[130px]"
+      className="group relative overflow-hidden rounded-2xl shadow-soft animate-fade-in min-h-[140px] sm:min-h-[170px]"
       style={{
         ["--mx" as never]: "0px",
         ["--my" as never]: "0px",
@@ -447,7 +447,7 @@ function InteractiveBanner({
         )}
       </div>
 
-      <div className="relative px-4 sm:px-5 py-3 sm:py-4 text-white flex items-center justify-between gap-3 min-h-[110px] sm:min-h-[130px]">
+      <div className="relative px-4 sm:px-6 py-4 sm:py-5 text-white flex items-center justify-between gap-4 min-h-[140px] sm:min-h-[170px]">
         <div className="flex items-center gap-3 min-w-0">
           <div className="grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-xl bg-white/20 backdrop-blur-md border border-white/30 shadow-md shrink-0 group-hover:scale-110 transition-transform">
             <Icon className="h-5 w-5" />
@@ -492,7 +492,7 @@ function ProductGrid({ title, products: items }: { title: string; products: Prod
           className="flex gap-3 overflow-x-auto px-4 lg:px-0 pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {items.map((p) => (
-            <div key={p.id} className="w-[108px] sm:w-[150px] shrink-0 snap-start">
+            <div key={p.id} className="w-[160px] sm:w-[200px] shrink-0 snap-start">
               <ProductCard p={p} />
             </div>
           ))}

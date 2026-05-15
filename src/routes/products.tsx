@@ -275,7 +275,7 @@ function ProductsPage() {
                 <p className="text-xs text-muted-foreground mt-1">جرّب قسم آخر أو امسح الفلاتر</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
                 {filtered.map((p) => <ProductCard key={p.id} p={p} />)}
               </div>
             )}
