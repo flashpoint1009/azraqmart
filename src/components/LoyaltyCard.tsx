@@ -1,5 +1,7 @@
-import { QRCodeSVG } from "qrcode.react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { Gift, Star, TrendingUp } from "lucide-react";
+
+const QRCodeSVG = lazy(() => import("qrcode.react").then(m => ({ default: m.QRCodeSVG })));
 
 interface LoyaltyCardProps {
   userId: string;
@@ -20,6 +22,8 @@ const TIER_CONFIG: Record<string, { color: string; bg: string; next: string; min
 export function LoyaltyCard({ userId, customerName, points, tier = "عميل جديد", totalOrders = 0 }: LoyaltyCardProps) {
   const tierConfig = TIER_CONFIG[tier] || TIER_CONFIG["عميل جديد"];
   const qrValue = JSON.stringify({ type: "zonemart_customer", id: userId, v: 1 });
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => { setIsClient(true); }, []);
 
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
@@ -34,13 +38,19 @@ export function LoyaltyCard({ userId, customerName, points, tier = "عميل ج�
             </span>
           </div>
           <div className="bg-white rounded-xl p-2 shadow-md">
-            <QRCodeSVG
-              value={qrValue}
-              size={80}
-              level="M"
-              bgColor="transparent"
-              fgColor="#1a1a1a"
-            />
+            {isClient ? (
+              <Suspense fallback={<div className="w-[80px] h-[80px] skeleton" />}>
+                <QRCodeSVG
+                  value={qrValue}
+                  size={80}
+                  level="M"
+                  bgColor="transparent"
+                  fgColor="#1a1a1a"
+                />
+              </Suspense>
+            ) : (
+              <div className="w-[80px] h-[80px] skeleton" />
+            )}
           </div>
         </div>
       </div>

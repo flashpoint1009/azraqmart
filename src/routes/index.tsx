@@ -123,7 +123,7 @@ function HomePage() {
         {/* Promo Banner Slider */}
         <PromoBanners bannerByKey={bannerByKey} />
 
-        {/* Categories — circular style like Talabat */}
+        {/* Categories — single row horizontal scroll */}
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-bold">الأقسام</h2>
@@ -131,7 +131,7 @@ function HomePage() {
               الكل <ArrowLeft className="h-3 w-3" />
             </Link>
           </div>
-          <div className="grid grid-cols-5 gap-2 sm:grid-cols-5 md:grid-cols-10">
+          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {mainCategories.map((c, i) => {
               const img = c.image_url || CATEGORY_IMAGES[c.name] || FALLBACK_CATEGORY_IMAGES[i % FALLBACK_CATEGORY_IMAGES.length];
               return (
@@ -139,19 +139,19 @@ function HomePage() {
                   key={c.id}
                   to="/products"
                   search={{ category: c.id } as never}
-                  className="flex flex-col items-center gap-1.5 group"
+                  className="flex flex-col items-center gap-1.5 group shrink-0 snap-start"
                 >
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors shadow-sm">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors shadow-sm">
                     <img src={img} alt={c.name} loading="lazy" className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <span className="text-[10px] sm:text-[11px] font-bold text-center leading-tight line-clamp-2 text-foreground">{c.name}</span>
+                  <span className="text-[10px] font-bold text-center leading-tight line-clamp-1 text-foreground w-16">{c.name}</span>
                 </Link>
               );
             })}
           </div>
         </section>
 
-        {/* Featured Products */}
+        {/* Featured Products — horizontal scroll */}
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-lg font-bold">عروض مميزة 🔥</h2>
@@ -159,9 +159,11 @@ function HomePage() {
               عرض الكل <ArrowLeft className="h-3 w-3" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {featuredProducts.slice(0, 10).map((p) => (
-              <ProductCard key={p.id} p={p} />
+              <div key={p.id} className="w-[140px] sm:w-[160px] shrink-0 snap-start">
+                <ProductCard p={p} />
+              </div>
             ))}
           </div>
         </section>
@@ -182,7 +184,7 @@ function HomePage() {
           );
         })()}
 
-        {/* More Products */}
+        {/* More Products — horizontal scroll */}
         {featuredProducts.length > 10 && (
           <section>
             <div className="flex items-center justify-between mb-3">
@@ -191,9 +193,11 @@ function HomePage() {
                 عرض الكل <ArrowLeft className="h-3 w-3" />
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {featuredProducts.slice(10, 20).map((p) => (
-                <ProductCard key={p.id} p={p} />
+                <div key={p.id} className="w-[140px] sm:w-[160px] shrink-0 snap-start">
+                  <ProductCard p={p} />
+                </div>
               ))}
             </div>
           </section>
@@ -204,6 +208,16 @@ function HomePage() {
           <TrustBadge icon={Truck} title="توصيل سريع" desc="خلال ساعة" />
           <TrustBadge icon={Star} title="منتجات طازة" desc="جودة مضمونة" />
           <TrustBadge icon={Sparkles} title="عروض يومية" desc="وفّر أكتر" />
+        </section>
+
+        {/* Our Branches */}
+        <section>
+          <h2 className="font-display text-lg font-bold mb-3">فروعنا 📍</h2>
+          <div className="space-y-2">
+            <BranchCard name="فرع المعادي" address="شارع 9 — المعادي الجديدة، القاهرة" hours="8 ص - 12 م" />
+            <BranchCard name="فرع مدينة نصر" address="شارع مصطفى النحاس — أمام سيتي ستارز" hours="9 ص - 11 م" />
+            <BranchCard name="فرع 6 أكتوبر" address="المحور المركزي — مول العرب" hours="10 ص - 12 م" />
+          </div>
         </section>
       </main>
     </div>
@@ -234,6 +248,23 @@ function TrustBadge({ icon: Icon, title, desc }: { icon: typeof Truck; title: st
       </div>
       <p className="text-[11px] font-bold text-foreground">{title}</p>
       <p className="text-[10px] text-muted-foreground">{desc}</p>
+    </div>
+  );
+}
+
+function BranchCard({ name, address, hours }: { name: string; address: string; hours: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+      <div className="grid h-10 w-10 place-items-center rounded-full bg-accent-soft text-accent-foreground shrink-0">
+        <MapPin className="h-5 w-5" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-bold text-foreground">{name}</p>
+        <p className="text-[11px] text-muted-foreground truncate">{address}</p>
+        <p className="text-[10px] text-primary font-semibold flex items-center gap-1 mt-0.5">
+          <Clock className="h-3 w-3" /> {hours}
+        </p>
+      </div>
     </div>
   );
 }
