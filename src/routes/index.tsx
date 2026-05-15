@@ -214,9 +214,24 @@ function HomePage() {
         <section>
           <h2 className="font-display text-lg font-bold mb-3">فروعنا 📍</h2>
           <div className="space-y-2">
-            <BranchCard name="فرع المعادي" address="شارع 9 — المعادي الجديدة، القاهرة" hours="8 ص - 12 م" />
-            <BranchCard name="فرع مدينة نصر" address="شارع مصطفى النحاس — أمام سيتي ستارز" hours="9 ص - 11 م" />
-            <BranchCard name="فرع 6 أكتوبر" address="المحور المركزي — مول العرب" hours="10 ص - 12 م" />
+            <BranchCard name="فرع زهراء المعادي" address="85 شارع خاتم المرسلين — أمام شركة الشرقية للدخان" hours="8 ص - 12 م" />
+            <BranchCard name="فرع كمبوند تبارك" address="كمبوند تبارك — مدخل 2" hours="9 ص - 11 م" />
+            <BranchCard name="فرع مساكن شيراتون" address="مساكن شيراتون قطعة 5 — بجوار مسجد الصديق" hours="9 ص - 12 م" />
+          </div>
+          {/* Contact */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a href="tel:01153818868" className="inline-flex items-center gap-1.5 rounded-lg bg-primary-soft px-3 py-2 text-xs font-bold text-primary">
+              📞 01153818868
+            </a>
+            <a href="mailto:info@zonemart.co" className="inline-flex items-center gap-1.5 rounded-lg bg-primary-soft px-3 py-2 text-xs font-bold text-primary">
+              ✉️ info@zonemart.co
+            </a>
+            <a href="https://www.instagram.com/zonemarteg" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-lg bg-primary-soft px-3 py-2 text-xs font-bold text-primary">
+              📸 Instagram
+            </a>
+            <a href="https://tiktok.com/@zonemarteg" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 rounded-lg bg-primary-soft px-3 py-2 text-xs font-bold text-primary">
+              🎵 TikTok
+            </a>
           </div>
         </section>
       </main>

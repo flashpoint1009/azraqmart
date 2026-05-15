@@ -36,24 +36,12 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  // Apply theme dynamically (only if explicitly set by developer, skip defaults)
+  // Theme colors are defined in styles.css — no dynamic override needed.
+  // The developer panel can update app_settings but colors are baked into the CSS build.
   useEffect(() => {
     if (!data || typeof document === "undefined") return;
-    const root = document.documentElement;
-    // Only override if the color is different from the DB default (أزرق ماركت legacy)
-    const isLegacyBlue = data.primary_color?.includes("240") || data.primary_color?.includes("245");
-    if (data.primary_color && !isLegacyBlue) {
-      root.style.setProperty("--primary", data.primary_color);
-    }
-    if (data.accent_color && !data.accent_color.includes("55")) {
-      root.style.setProperty("--accent", data.accent_color);
-    }
-    if (data.background_color && !data.background_color.includes("240")) {
-      root.style.setProperty("--background", data.background_color);
-    }
-    if (data.font_family && data.font_family !== "Cairo") {
-      root.style.setProperty("--font-sans", data.font_family);
-    }
+    // Only set title
+    if (data.app_name) document.title = data.app_name;
   }, [data]);
 
   return (
