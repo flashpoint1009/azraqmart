@@ -19,7 +19,7 @@ import {
   Tag,
   User as UserIcon,
 } from "lucide-react";
-import logoMark from "@/assets/logo.png";
+import logoMark from "@/assets/logo.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { isFeatureEnabled } from "@/lib/features";
