@@ -37,7 +37,6 @@ const tabs: Tab[] = [
   { to: "/developer", label: "المطور", icon: Settings2, roles: ["developer"], perm: "developer" },
   { to: "/developer/saas", label: "SaaS متقدم", icon: Activity, roles: ["developer"] },
   { to: "/admin/tenants", label: "إدارة المستأجرين", icon: Building2, roles: ["developer", "admin"] },
-  { to: "/onboarding/branding", label: "تخصيص العلامة", icon: Palette, roles: ["developer", "admin"] },
 ];
 
 export function StaffNav() {
