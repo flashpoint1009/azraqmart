@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WarehouseAdvancedRouteImport } from './routes/warehouse-advanced'
 import { Route as WarehouseRouteImport } from './routes/warehouse'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SellRouteImport } from './routes/sell'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as OrdersRouteImport } from './routes/orders'
@@ -59,6 +60,11 @@ const WarehouseRoute = WarehouseRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -240,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/orders': typeof OrdersRouteWithChildren
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
+  '/sell': typeof SellRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByTo {
   '/orders': typeof OrdersRouteWithChildren
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
+  '/sell': typeof SellRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
@@ -317,6 +325,7 @@ export interface FileRoutesById {
   '/orders': typeof OrdersRouteWithChildren
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
+  '/sell': typeof SellRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
@@ -357,6 +366,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/portfolio'
     | '/products'
+    | '/sell'
     | '/sitemap.xml'
     | '/warehouse'
     | '/warehouse-advanced'
@@ -395,6 +405,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/portfolio'
     | '/products'
+    | '/sell'
     | '/sitemap.xml'
     | '/warehouse'
     | '/warehouse-advanced'
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/portfolio'
     | '/products'
+    | '/sell'
     | '/sitemap.xml'
     | '/warehouse'
     | '/warehouse-advanced'
@@ -472,6 +484,7 @@ export interface RootRouteChildren {
   OrdersRoute: typeof OrdersRouteWithChildren
   PortfolioRoute: typeof PortfolioRoute
   ProductsRoute: typeof ProductsRoute
+  SellRoute: typeof SellRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WarehouseRoute: typeof WarehouseRoute
   WarehouseAdvancedRoute: typeof WarehouseAdvancedRoute
@@ -515,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -821,6 +841,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersRoute: OrdersRouteWithChildren,
   PortfolioRoute: PortfolioRoute,
   ProductsRoute: ProductsRoute,
+  SellRoute: SellRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WarehouseRoute: WarehouseRoute,
   WarehouseAdvancedRoute: WarehouseAdvancedRoute,
