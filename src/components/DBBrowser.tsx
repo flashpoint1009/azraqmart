@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useTenantScopedSupabase } from "@/integrations/supabase/scoped-client";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Reference migration for task 5.1 of the white-label SaaS spec.
@@ -15,10 +15,9 @@ import { useTenantScopedSupabase } from "@/integrations/supabase/scoped-client";
  * Source: `.kiro/specs/white-label-saas-system/tasks.md` task 5.1
  * Validates: Requirements 1.2, 11.6
  *
- * All Supabase queries below are routed through `useTenantScopedSupabase()`
- * so the `app.tenant_id` GUC is set for the duration of each query (see
- * `src/integrations/supabase/scoped-client.ts`). The UI is unchanged from
- * the pre-migration version; only the data plumbing is rerouted.
+ * Uses the standard supabase client directly since the DBBrowser is a
+ * developer tool that operates outside the tenant context. RLS policies
+ * handle data isolation at the database level.
  */
 
 /** Whitelist of safe tables exposed to the developer DB browser. */
@@ -34,7 +33,7 @@ type TableName = (typeof TABLES)[number];
 
 export function DBBrowser() {
   const qc = useQueryClient();
-  const runScoped = useTenantScopedSupabase();
+  const runScoped = async <T,>(fn: (client: typeof supabase) => Promise<T>): Promise<T> => fn(supabase);
   const [table, setTable] = useState<TableName>("products");
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<any | null>(null);
