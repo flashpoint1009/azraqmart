@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WarehouseAdvancedRouteImport } from './routes/warehouse-advanced'
 import { Route as WarehouseRouteImport } from './routes/warehouse'
+import { Route as SuspendedRouteImport } from './routes/suspended'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
@@ -25,9 +26,11 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
+import { Route as OnboardingBrandingRouteImport } from './routes/onboarding/branding'
 import { Route as DeveloperSaasRouteImport } from './routes/developer.saas'
 import { Route as DeliveryOrderIdRouteImport } from './routes/delivery.$orderId'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminPushRouteImport } from './routes/admin.push'
 import { Route as AdminPurchasesRouteImport } from './routes/admin.purchases'
@@ -43,8 +46,14 @@ import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as AdminAboutRouteImport } from './routes/admin.about'
 import { Route as AccountPasswordRouteImport } from './routes/account.password'
+import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 import { Route as ApiPublicSendPushRouteImport } from './routes/api/public/send-push'
+import { Route as ApiAdminTenantsRouteImport } from './routes/api/admin/tenants'
+import { Route as ApiAdminFeaturesRouteImport } from './routes/api/admin/features'
 import { Route as AdminCustomersCustomerIdRouteImport } from './routes/admin.customers.$customerId'
+import { Route as ApiAdminTenantsTenantIdMobileBuildRouteImport } from './routes/api/admin/tenants.$tenantId.mobile-build'
+import { Route as ApiAdminTenantsIdSuspendRouteImport } from './routes/api/admin/tenants.$id.suspend'
+import { Route as ApiAdminTenantsIdResumeRouteImport } from './routes/api/admin/tenants.$id.resume'
 
 const WarehouseAdvancedRoute = WarehouseAdvancedRouteImport.update({
   id: '/warehouse-advanced',
@@ -54,6 +63,11 @@ const WarehouseAdvancedRoute = WarehouseAdvancedRouteImport.update({
 const WarehouseRoute = WarehouseRouteImport.update({
   id: '/warehouse',
   path: '/warehouse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuspendedRoute = SuspendedRouteImport.update({
+  id: '/suspended',
+  path: '/suspended',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -126,6 +140,11 @@ const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
   path: '/$orderId',
   getParentRoute: () => OrdersRoute,
 } as any)
+const OnboardingBrandingRoute = OnboardingBrandingRouteImport.update({
+  id: '/onboarding/branding',
+  path: '/onboarding/branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeveloperSaasRoute = DeveloperSaasRouteImport.update({
   id: '/saas',
   path: '/saas',
@@ -139,6 +158,11 @@ const DeliveryOrderIdRoute = DeliveryOrderIdRouteImport.update({
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTenantsRoute = AdminTenantsRouteImport.update({
+  id: '/admin/tenants',
+  path: '/admin/tenants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminReportsRoute = AdminReportsRouteImport.update({
@@ -216,9 +240,24 @@ const AccountPasswordRoute = AccountPasswordRouteImport.update({
   path: '/password',
   getParentRoute: () => AccountRoute,
 } as any)
+const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
+  id: '/api/webhooks/stripe',
+  path: '/api/webhooks/stripe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSendPushRoute = ApiPublicSendPushRouteImport.update({
   id: '/api/public/send-push',
   path: '/api/public/send-push',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminTenantsRoute = ApiAdminTenantsRouteImport.update({
+  id: '/api/admin/tenants',
+  path: '/api/admin/tenants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminFeaturesRoute = ApiAdminFeaturesRouteImport.update({
+  id: '/api/admin/features',
+  path: '/api/admin/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCustomersCustomerIdRoute =
@@ -227,6 +266,23 @@ const AdminCustomersCustomerIdRoute =
     path: '/$customerId',
     getParentRoute: () => AdminCustomersRoute,
   } as any)
+const ApiAdminTenantsTenantIdMobileBuildRoute =
+  ApiAdminTenantsTenantIdMobileBuildRouteImport.update({
+    id: '/$tenantId/mobile-build',
+    path: '/$tenantId/mobile-build',
+    getParentRoute: () => ApiAdminTenantsRoute,
+  } as any)
+const ApiAdminTenantsIdSuspendRoute =
+  ApiAdminTenantsIdSuspendRouteImport.update({
+    id: '/$id/suspend',
+    path: '/$id/suspend',
+    getParentRoute: () => ApiAdminTenantsRoute,
+  } as any)
+const ApiAdminTenantsIdResumeRoute = ApiAdminTenantsIdResumeRouteImport.update({
+  id: '/$id/resume',
+  path: '/$id/resume',
+  getParentRoute: () => ApiAdminTenantsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -241,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suspended': typeof SuspendedRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
   '/account/password': typeof AccountPasswordRoute
@@ -258,13 +315,21 @@ export interface FileRoutesByFullPath {
   '/admin/purchases': typeof AdminPurchasesRoute
   '/admin/push': typeof AdminPushRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/admin/users': typeof AdminUsersRoute
   '/delivery/$orderId': typeof DeliveryOrderIdRoute
   '/developer/saas': typeof DeveloperSaasRoute
+  '/onboarding/branding': typeof OnboardingBrandingRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
+  '/api/admin/features': typeof ApiAdminFeaturesRoute
+  '/api/admin/tenants': typeof ApiAdminTenantsRouteWithChildren
   '/api/public/send-push': typeof ApiPublicSendPushRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/admin/tenants/$id/resume': typeof ApiAdminTenantsIdResumeRoute
+  '/api/admin/tenants/$id/suspend': typeof ApiAdminTenantsIdSuspendRoute
+  '/api/admin/tenants/$tenantId/mobile-build': typeof ApiAdminTenantsTenantIdMobileBuildRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -279,6 +344,7 @@ export interface FileRoutesByTo {
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suspended': typeof SuspendedRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
   '/account/password': typeof AccountPasswordRoute
@@ -296,13 +362,21 @@ export interface FileRoutesByTo {
   '/admin/purchases': typeof AdminPurchasesRoute
   '/admin/push': typeof AdminPushRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/admin/users': typeof AdminUsersRoute
   '/delivery/$orderId': typeof DeliveryOrderIdRoute
   '/developer/saas': typeof DeveloperSaasRoute
+  '/onboarding/branding': typeof OnboardingBrandingRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
+  '/api/admin/features': typeof ApiAdminFeaturesRoute
+  '/api/admin/tenants': typeof ApiAdminTenantsRouteWithChildren
   '/api/public/send-push': typeof ApiPublicSendPushRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/admin/tenants/$id/resume': typeof ApiAdminTenantsIdResumeRoute
+  '/api/admin/tenants/$id/suspend': typeof ApiAdminTenantsIdSuspendRoute
+  '/api/admin/tenants/$tenantId/mobile-build': typeof ApiAdminTenantsTenantIdMobileBuildRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -318,6 +392,7 @@ export interface FileRoutesById {
   '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suspended': typeof SuspendedRoute
   '/warehouse': typeof WarehouseRoute
   '/warehouse-advanced': typeof WarehouseAdvancedRoute
   '/account/password': typeof AccountPasswordRoute
@@ -335,13 +410,21 @@ export interface FileRoutesById {
   '/admin/purchases': typeof AdminPurchasesRoute
   '/admin/push': typeof AdminPushRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
   '/admin/users': typeof AdminUsersRoute
   '/delivery/$orderId': typeof DeliveryOrderIdRoute
   '/developer/saas': typeof DeveloperSaasRoute
+  '/onboarding/branding': typeof OnboardingBrandingRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
+  '/api/admin/features': typeof ApiAdminFeaturesRoute
+  '/api/admin/tenants': typeof ApiAdminTenantsRouteWithChildren
   '/api/public/send-push': typeof ApiPublicSendPushRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
+  '/api/admin/tenants/$id/resume': typeof ApiAdminTenantsIdResumeRoute
+  '/api/admin/tenants/$id/suspend': typeof ApiAdminTenantsIdSuspendRoute
+  '/api/admin/tenants/$tenantId/mobile-build': typeof ApiAdminTenantsTenantIdMobileBuildRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -358,6 +441,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/products'
     | '/sitemap.xml'
+    | '/suspended'
     | '/warehouse'
     | '/warehouse-advanced'
     | '/account/password'
@@ -375,13 +459,21 @@ export interface FileRouteTypes {
     | '/admin/purchases'
     | '/admin/push'
     | '/admin/reports'
+    | '/admin/tenants'
     | '/admin/users'
     | '/delivery/$orderId'
     | '/developer/saas'
+    | '/onboarding/branding'
     | '/orders/$orderId'
     | '/admin/'
     | '/admin/customers/$customerId'
+    | '/api/admin/features'
+    | '/api/admin/tenants'
     | '/api/public/send-push'
+    | '/api/webhooks/stripe'
+    | '/api/admin/tenants/$id/resume'
+    | '/api/admin/tenants/$id/suspend'
+    | '/api/admin/tenants/$tenantId/mobile-build'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -396,6 +488,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/products'
     | '/sitemap.xml'
+    | '/suspended'
     | '/warehouse'
     | '/warehouse-advanced'
     | '/account/password'
@@ -413,13 +506,21 @@ export interface FileRouteTypes {
     | '/admin/purchases'
     | '/admin/push'
     | '/admin/reports'
+    | '/admin/tenants'
     | '/admin/users'
     | '/delivery/$orderId'
     | '/developer/saas'
+    | '/onboarding/branding'
     | '/orders/$orderId'
     | '/admin'
     | '/admin/customers/$customerId'
+    | '/api/admin/features'
+    | '/api/admin/tenants'
     | '/api/public/send-push'
+    | '/api/webhooks/stripe'
+    | '/api/admin/tenants/$id/resume'
+    | '/api/admin/tenants/$id/suspend'
+    | '/api/admin/tenants/$tenantId/mobile-build'
   id:
     | '__root__'
     | '/'
@@ -434,6 +535,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/products'
     | '/sitemap.xml'
+    | '/suspended'
     | '/warehouse'
     | '/warehouse-advanced'
     | '/account/password'
@@ -451,13 +553,21 @@ export interface FileRouteTypes {
     | '/admin/purchases'
     | '/admin/push'
     | '/admin/reports'
+    | '/admin/tenants'
     | '/admin/users'
     | '/delivery/$orderId'
     | '/developer/saas'
+    | '/onboarding/branding'
     | '/orders/$orderId'
     | '/admin/'
     | '/admin/customers/$customerId'
+    | '/api/admin/features'
+    | '/api/admin/tenants'
     | '/api/public/send-push'
+    | '/api/webhooks/stripe'
+    | '/api/admin/tenants/$id/resume'
+    | '/api/admin/tenants/$id/suspend'
+    | '/api/admin/tenants/$tenantId/mobile-build'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -473,6 +583,7 @@ export interface RootRouteChildren {
   PortfolioRoute: typeof PortfolioRoute
   ProductsRoute: typeof ProductsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SuspendedRoute: typeof SuspendedRoute
   WarehouseRoute: typeof WarehouseRoute
   WarehouseAdvancedRoute: typeof WarehouseAdvancedRoute
   AdminAboutRoute: typeof AdminAboutRoute
@@ -489,9 +600,14 @@ export interface RootRouteChildren {
   AdminPurchasesRoute: typeof AdminPurchasesRoute
   AdminPushRoute: typeof AdminPushRoute
   AdminReportsRoute: typeof AdminReportsRoute
+  AdminTenantsRoute: typeof AdminTenantsRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  OnboardingBrandingRoute: typeof OnboardingBrandingRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  ApiAdminFeaturesRoute: typeof ApiAdminFeaturesRoute
+  ApiAdminTenantsRoute: typeof ApiAdminTenantsRouteWithChildren
   ApiPublicSendPushRoute: typeof ApiPublicSendPushRoute
+  ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -508,6 +624,13 @@ declare module '@tanstack/react-router' {
       path: '/warehouse'
       fullPath: '/warehouse'
       preLoaderRoute: typeof WarehouseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suspended': {
+      id: '/suspended'
+      path: '/suspended'
+      fullPath: '/suspended'
+      preLoaderRoute: typeof SuspendedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -608,6 +731,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersOrderIdRouteImport
       parentRoute: typeof OrdersRoute
     }
+    '/onboarding/branding': {
+      id: '/onboarding/branding'
+      path: '/onboarding/branding'
+      fullPath: '/onboarding/branding'
+      preLoaderRoute: typeof OnboardingBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/developer/saas': {
       id: '/developer/saas'
       path: '/saas'
@@ -627,6 +757,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/tenants': {
+      id: '/admin/tenants'
+      path: '/admin/tenants'
+      fullPath: '/admin/tenants'
+      preLoaderRoute: typeof AdminTenantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/reports': {
@@ -734,11 +871,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountPasswordRouteImport
       parentRoute: typeof AccountRoute
     }
+    '/api/webhooks/stripe': {
+      id: '/api/webhooks/stripe'
+      path: '/api/webhooks/stripe'
+      fullPath: '/api/webhooks/stripe'
+      preLoaderRoute: typeof ApiWebhooksStripeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/send-push': {
       id: '/api/public/send-push'
       path: '/api/public/send-push'
       fullPath: '/api/public/send-push'
       preLoaderRoute: typeof ApiPublicSendPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/tenants': {
+      id: '/api/admin/tenants'
+      path: '/api/admin/tenants'
+      fullPath: '/api/admin/tenants'
+      preLoaderRoute: typeof ApiAdminTenantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/features': {
+      id: '/api/admin/features'
+      path: '/api/admin/features'
+      fullPath: '/api/admin/features'
+      preLoaderRoute: typeof ApiAdminFeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/customers/$customerId': {
@@ -747,6 +905,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/customers/$customerId'
       preLoaderRoute: typeof AdminCustomersCustomerIdRouteImport
       parentRoute: typeof AdminCustomersRoute
+    }
+    '/api/admin/tenants/$tenantId/mobile-build': {
+      id: '/api/admin/tenants/$tenantId/mobile-build'
+      path: '/$tenantId/mobile-build'
+      fullPath: '/api/admin/tenants/$tenantId/mobile-build'
+      preLoaderRoute: typeof ApiAdminTenantsTenantIdMobileBuildRouteImport
+      parentRoute: typeof ApiAdminTenantsRoute
+    }
+    '/api/admin/tenants/$id/suspend': {
+      id: '/api/admin/tenants/$id/suspend'
+      path: '/$id/suspend'
+      fullPath: '/api/admin/tenants/$id/suspend'
+      preLoaderRoute: typeof ApiAdminTenantsIdSuspendRouteImport
+      parentRoute: typeof ApiAdminTenantsRoute
+    }
+    '/api/admin/tenants/$id/resume': {
+      id: '/api/admin/tenants/$id/resume'
+      path: '/$id/resume'
+      fullPath: '/api/admin/tenants/$id/resume'
+      preLoaderRoute: typeof ApiAdminTenantsIdResumeRouteImport
+      parentRoute: typeof ApiAdminTenantsRoute
     }
   }
 }
@@ -809,6 +988,23 @@ const AdminCustomersRouteWithChildren = AdminCustomersRoute._addFileChildren(
   AdminCustomersRouteChildren,
 )
 
+interface ApiAdminTenantsRouteChildren {
+  ApiAdminTenantsIdResumeRoute: typeof ApiAdminTenantsIdResumeRoute
+  ApiAdminTenantsIdSuspendRoute: typeof ApiAdminTenantsIdSuspendRoute
+  ApiAdminTenantsTenantIdMobileBuildRoute: typeof ApiAdminTenantsTenantIdMobileBuildRoute
+}
+
+const ApiAdminTenantsRouteChildren: ApiAdminTenantsRouteChildren = {
+  ApiAdminTenantsIdResumeRoute: ApiAdminTenantsIdResumeRoute,
+  ApiAdminTenantsIdSuspendRoute: ApiAdminTenantsIdSuspendRoute,
+  ApiAdminTenantsTenantIdMobileBuildRoute:
+    ApiAdminTenantsTenantIdMobileBuildRoute,
+}
+
+const ApiAdminTenantsRouteWithChildren = ApiAdminTenantsRoute._addFileChildren(
+  ApiAdminTenantsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRouteWithChildren,
@@ -822,6 +1018,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioRoute: PortfolioRoute,
   ProductsRoute: ProductsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SuspendedRoute: SuspendedRoute,
   WarehouseRoute: WarehouseRoute,
   WarehouseAdvancedRoute: WarehouseAdvancedRoute,
   AdminAboutRoute: AdminAboutRoute,
@@ -838,20 +1035,15 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPurchasesRoute: AdminPurchasesRoute,
   AdminPushRoute: AdminPushRoute,
   AdminReportsRoute: AdminReportsRoute,
+  AdminTenantsRoute: AdminTenantsRoute,
   AdminUsersRoute: AdminUsersRoute,
+  OnboardingBrandingRoute: OnboardingBrandingRoute,
   AdminIndexRoute: AdminIndexRoute,
+  ApiAdminFeaturesRoute: ApiAdminFeaturesRoute,
+  ApiAdminTenantsRoute: ApiAdminTenantsRouteWithChildren,
   ApiPublicSendPushRoute: ApiPublicSendPushRoute,
+  ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

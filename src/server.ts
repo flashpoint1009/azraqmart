@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { recheckDomains } from "./server/cron/domain-recheck";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -77,4 +78,47 @@ export default {
       return brandedErrorResponse();
     }
   },
+
+  /**
+   * Cloudflare Workers scheduled (cron) handler.
+   *
+   * Wired to run every 10 minutes via `wrangler.jsonc` triggers.crons.
+   * Invokes the domain re-check worker to verify pending custom domains
+   * and mark stale ones as failed.
+   *
+   * Requirements: 8.9
+   */
+  async scheduled(
+    event: ScheduledEvent,
+    env: unknown,
+    ctx: ExecutionContext,
+  ): Promise<void> {
+    // eslint-disable-next-line no-console
+    console.log(`[cron] domain-recheck triggered at ${new Date(event.scheduledTime).toISOString()}`);
+    
+    try {
+      await recheckDomains();
+      // eslint-disable-next-line no-console
+      console.log("[cron] domain-recheck completed successfully");
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("[cron] domain-recheck failed", error);
+      // Don't throw — let the cron tick complete so the next one can retry
+    }
+  },
 };
+
+/**
+ * Cloudflare Workers types for the scheduled handler.
+ * These are provided by @cloudflare/workers-types but declared inline
+ * here to avoid adding a dev dependency just for two interfaces.
+ */
+interface ScheduledEvent {
+  scheduledTime: number;
+  cron: string;
+}
+
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException(): void;
+}
