@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Activity, Bell, Bot, ClipboardList, FolderTree, Image, LayoutDashboard, MapPin, Menu, MessageSquare,
-  Package, Receipt, Settings2, ShoppingBag, Tag, Truck, Users, Wallet, Warehouse,
+  Activity, Bell, Bot, Building2, ClipboardList, FolderTree, Image, LayoutDashboard, MapPin, Menu, MessageSquare,
+  Package, Palette, Receipt, Settings2, ShoppingBag, Tag, Truck, Users, Wallet, Warehouse,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -36,6 +36,8 @@ const tabs: Tab[] = [
   { to: "/admin/users", label: "المستخدمين", icon: Users, roles: ["admin"], perm: "users", feature: "users" },
   { to: "/developer", label: "المطور", icon: Settings2, roles: ["developer"], perm: "developer" },
   { to: "/developer/saas", label: "SaaS متقدم", icon: Activity, roles: ["developer"] },
+  { to: "/admin/tenants", label: "إدارة المستأجرين", icon: Building2, roles: ["developer", "admin"] },
+  { to: "/onboarding/branding", label: "تخصيص العلامة", icon: Palette, roles: ["developer", "admin"] },
 ];
 
 export function StaffNav() {
