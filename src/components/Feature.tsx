@@ -27,8 +27,27 @@
  */
 
 import { useTenant } from "@/lib/tenancy/context";
-import { evaluateFeature } from "@/lib/tenancy/features";
-import type { FeatureKey, FeatureOverride } from "@/lib/tenancy/types";
+import type { FeatureKey, FeatureOverride, TenantFeatures } from "@/lib/tenancy/types";
+
+/**
+ * Pure client-side feature evaluation. Inlined here to avoid importing
+ * from features.ts which pulls in server-only supabaseAdmin.
+ */
+function evaluateFeature(
+  features: TenantFeatures,
+  key: FeatureKey,
+  override?: FeatureOverride | null,
+): boolean {
+  if (override && override.enabled) {
+    if (override.expiresAt === null) return true;
+    if (new Date(override.expiresAt).getTime() > Date.now()) return true;
+  }
+  if (override && !override.enabled) {
+    if (override.expiresAt === null) return false;
+    if (new Date(override.expiresAt).getTime() > Date.now()) return false;
+  }
+  return features.enabled.has(key);
+}
 
 // ---------------------------------------------------------------------------
 // Public API

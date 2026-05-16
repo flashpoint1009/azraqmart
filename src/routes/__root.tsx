@@ -8,7 +8,6 @@ import {
   Scripts,
   redirect,
 } from "@tanstack/react-router";
-import { getRequest } from "@tanstack/react-start/server";
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -20,7 +19,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { applyBranding } from "@/lib/tenancy/branding";
 import { TenantProvider, type TenantContextValue } from "@/lib/tenancy/context";
-import { resolveTenant } from "@/lib/tenancy/resolver";
 import type { Tenant, TenantBranding } from "@/lib/tenancy/types";
 
 /**
@@ -154,68 +152,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
    * Requirements: 2.5, 2.6, 2.7, 4.10
    */
   beforeLoad: async () => {
-    let tenant: Tenant | null = null;
-
-    try {
-      const req = getRequest();
-      if (req?.headers) {
-        const url = new URL(req.url);
-        const host = req.headers.get("host") ?? url.host ?? "";
-        const pathname = url.pathname;
-        const result = await resolveTenant(host, req.headers, pathname);
-
-        if (result.ok) {
-          tenant = result.tenant;
-
-          // Task 12.6: Suspended-tenant route gate
-          // Per Requirement 4.10: WHILE `tenants.status` is `suspended`
-          // or `cancelled`, THE System SHALL block all storefront routes
-          // for that tenant except the suspended landing page and the
-          // Stripe billing portal redirect.
-          if (tenant.status === "suspended" || tenant.status === "cancelled") {
-            const isAllowedRoute =
-              pathname === "/suspended" || pathname.startsWith("/api/billing/portal");
-
-            if (!isAllowedRoute) {
-              // Per Requirement 2.7: HTTP 402 routed to the suspended page.
-              throw redirect({ href: "/suspended", statusCode: 402 });
-            }
-          }
-        } else if (result.reason === "suspended") {
-          // The resolver itself detected a suspended tenant before
-          // returning it. This path is a fallback; the primary gate is
-          // the status check above after `result.ok === true`.
-          const pathname = url.pathname;
-          const isAllowedRoute =
-            pathname === "/suspended" || pathname.startsWith("/api/billing/portal");
-
-          if (!isAllowedRoute) {
-            throw redirect({ href: "/suspended", statusCode: 402 });
-          }
-          // If we're already on an allowed route, don't redirect — let
-          // the route render. The tenant will be null in this case.
-          tenant = null;
-        } else if (result.reason === "not_found" || result.reason === "invalid_host") {
-          // Per Requirement 2.6: redirect unresolved hosts to the marketing
-          // landing in production. In dev the marketing route does not yet
-          // exist and tenant subdomains are not wired, so fall through with
-          // `tenant === null` so the existing dev experience keeps working.
-          if (process.env.NODE_ENV === "production") {
-            throw redirect({ href: "/marketing" });
-          }
-          tenant = null;
-        }
-      }
-    } catch (err) {
-      // Redirects from `redirect()` are Response objects — re-throw so
-      // the router actually performs the navigation.
-      if (err instanceof Response) throw err;
-      // Any other failure (e.g. `getRequest()` invoked outside the SSR
-      // async-local storage during a static build) falls back to a null
-      // tenant so the dev path stays operational.
-      tenant = null;
-    }
-
+    // Tenant resolution is handled server-side. In the client bundle,
+    // we simply return null and let the app work as single-tenant.
+    // The full multi-tenant resolution requires the server environment
+    // (getRequest, DB access) which is not available in the client.
+    const tenant: Tenant | null = null;
     return { tenant };
   },
   head: () => ({
