@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { normalizePhone, phoneToEmail } from "@/lib/phone-auth";
-import warehouseHero from "@/assets/warehouse-hero.jpg";
+import warehouseHero from "@/assets/warehouse-hero3.jpg";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
