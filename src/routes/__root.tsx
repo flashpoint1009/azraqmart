@@ -12,6 +12,7 @@ import {
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AppSettingsProvider } from "@/hooks/useAppSettings";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FloatingCartButton } from "@/components/FloatingCartButton";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -266,14 +267,16 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <MaybeTenantProvider value={tenantValue}>
         <AuthProvider>
-          <AppSettingsProvider>
-            <PushBootstrap />
-            <Outlet />
-            <FloatingCartButton />
-            <MobileBottomNav />
-            <ChatWidget />
-            <Toaster position="top-center" richColors />
-          </AppSettingsProvider>
+          <ThemeProvider>
+            <AppSettingsProvider>
+              <PushBootstrap />
+              <Outlet />
+              <FloatingCartButton />
+              <MobileBottomNav />
+              <ChatWidget />
+              <Toaster position="top-center" richColors />
+            </AppSettingsProvider>
+          </ThemeProvider>
         </AuthProvider>
       </MaybeTenantProvider>
     </QueryClientProvider>

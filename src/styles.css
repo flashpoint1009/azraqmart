@@ -152,6 +152,11 @@
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --transition-base: 200ms var(--ease-out);
+
+  /* Dynamic theming defaults (RGB values for white-label injection) */
+  --color-primary: 15 31 58;
+  --color-accent: 40 167 69;
+  --font-family-primary: "Cairo", sans-serif;
 }
 
 .dark {
