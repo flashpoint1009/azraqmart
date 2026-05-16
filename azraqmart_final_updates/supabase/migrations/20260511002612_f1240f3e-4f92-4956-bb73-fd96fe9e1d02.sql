@@ -1,0 +1,2 @@
+DELETE FROM public.order_items WHERE order_id IN ('7b5ed924-00a1-4c2b-b35b-674ae1f77cc6','9d4af6e4-db0d-4633-b4f9-8165ba4da82e');
+DELETE FROM public.orders WHERE id IN ('7b5ed924-00a1-4c2b-b35b-674ae1f77cc6','9d4af6e4-db0d-4633-b4f9-8165ba4da82e');
