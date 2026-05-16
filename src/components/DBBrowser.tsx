@@ -9,6 +9,17 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 
+/**
+ * Reference migration for task 5.1 of the white-label SaaS spec.
+ *
+ * Source: `.kiro/specs/white-label-saas-system/tasks.md` task 5.1
+ * Validates: Requirements 1.2, 11.6
+ *
+ * Uses the standard supabase client directly since the DBBrowser is a
+ * developer tool that operates outside the tenant context. RLS policies
+ * handle data isolation at the database level.
+ */
+
 /** Whitelist of safe tables exposed to the developer DB browser. */
 const TABLES = [
   "products", "categories", "customers", "orders", "order_items",
@@ -22,17 +33,19 @@ type TableName = (typeof TABLES)[number];
 
 export function DBBrowser() {
   const qc = useQueryClient();
+  const runScoped = async <T,>(fn: (client: typeof supabase) => Promise<T>): Promise<T> => fn(supabase);
   const [table, setTable] = useState<TableName>("products");
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<any | null>(null);
 
   const { data: rows = [], isLoading, refetch } = useQuery({
     queryKey: ["db_browse", table],
-    queryFn: async () => {
-      const { data, error } = await supabase.from(table as any).select("*").limit(200);
-      if (error) throw error;
-      return (data ?? []) as any[];
-    },
+    queryFn: () =>
+      runScoped(async (scoped) => {
+        const { data, error } = await scoped.from(table as any).select("*").limit(200);
+        if (error) throw error;
+        return (data ?? []) as any[];
+      }),
   });
 
   const cols = useMemo(() => (rows[0] ? Object.keys(rows[0]) : []), [rows]);
@@ -44,10 +57,11 @@ export function DBBrowser() {
   }, [rows, search]);
 
   const update = useMutation({
-    mutationFn: async ({ id, patch }: { id: any; patch: Record<string, any> }) => {
-      const { error } = await supabase.from(table as any).update(patch).eq("id", id);
-      if (error) throw error;
-    },
+    mutationFn: ({ id, patch }: { id: any; patch: Record<string, any> }) =>
+      runScoped(async (scoped) => {
+        const { error } = await scoped.from(table as any).update(patch).eq("id", id);
+        if (error) throw error;
+      }),
     onSuccess: () => {
       toast.success("تم التحديث ✓");
       qc.invalidateQueries({ queryKey: ["db_browse", table] });
@@ -57,10 +71,11 @@ export function DBBrowser() {
   });
 
   const remove = useMutation({
-    mutationFn: async (id: any) => {
-      const { error } = await supabase.from(table as any).delete().eq("id", id);
-      if (error) throw error;
-    },
+    mutationFn: (id: any) =>
+      runScoped(async (scoped) => {
+        const { error } = await scoped.from(table as any).delete().eq("id", id);
+        if (error) throw error;
+      }),
     onSuccess: () => {
       toast.success("تم الحذف");
       qc.invalidateQueries({ queryKey: ["db_browse", table] });

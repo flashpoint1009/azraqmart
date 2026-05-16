@@ -2,14 +2,16 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, MapPin, Phone, Save, Store, User as UserIcon, Building2 } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "@/components/AppHeader";
+import { LoyaltyCard } from "@/components/LoyaltyCard";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { GOVERNORATES, REGIONS } from "@/lib/regions";
 
 export const Route = createFileRoute("/account")({
-  head: () => ({ meta: [{ title: "حسابي — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "حسابي — Zone Mart" }] }),
   component: AccountPage,
 });
 
@@ -111,18 +113,18 @@ function AccountPage() {
           <p className="text-xs text-muted-foreground mt-1">حدّث بياناتك مرة واحدة وكل طلباتك هتروح على نفس العنوان</p>
         </header>
 
+        {/* Loyalty Card */}
+        <LoyaltySection userId={user?.id} />
+
         <section className="rounded-3xl border border-border bg-card p-5 sm:p-6 shadow-soft space-y-4">
           {loading ? (
             <p className="text-sm text-muted-foreground">جاري التحميل…</p>
           ) : (
             <>
-              <Field icon={Store} label="اسم المحل / المؤسسة">
-                <input value={shopName} onChange={(e) => setShopName(e.target.value)} placeholder="مثلاً: سوبرماركت النور" className="input" />
+              <Field icon={UserIcon} label="الاسم">
+                <input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="اسمك بالكامل" className="input" />
               </Field>
-              <Field icon={UserIcon} label="اسم صاحب المحل">
-                <input value={ownerName} onChange={(e) => setOwnerName(e.target.value)} placeholder="الاسم بالكامل" className="input" />
-              </Field>
-              <Field icon={Phone} label="رقم التليفون *">
+              <Field icon={Phone} label="رقم الموبايل *">
                 <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01xxxxxxxxx" inputMode="tel" dir="ltr" className="input" />
               </Field>
               <Field icon={Building2} label="المحافظة *">
@@ -171,5 +173,50 @@ function Field({ icon: Icon, label, children }: { icon: typeof MapPin; label: st
       </span>
       {children}
     </label>
+  );
+}
+
+function LoyaltySection({ userId }: { userId?: string }) {
+  const { data } = useQuery({
+    queryKey: ["loyalty-card", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data: customer } = await supabase
+        .from("customers")
+        .select("id, owner_name, shop_name, points, tier")
+        .eq("user_id", userId!)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!customer) return null;
+
+      const { count } = await supabase
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .eq("customer_id", customer.id)
+        .eq("status", "delivered");
+
+      return {
+        name: customer.owner_name || customer.shop_name || "عميل",
+        points: customer.points ?? 0,
+        tier: customer.tier || "عميل جديد",
+        totalOrders: count ?? 0,
+      };
+    },
+  });
+
+  if (!userId || !data) return null;
+
+  return (
+    <div className="mb-5">
+      <LoyaltyCard
+        userId={userId}
+        customerName={data.name}
+        points={data.points}
+        tier={data.tier}
+        totalOrders={data.totalOrders}
+      />
+    </div>
   );
 }

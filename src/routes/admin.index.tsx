@@ -13,7 +13,7 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { isFeatureEnabled } from "@/lib/features";
 
 export const Route = createFileRoute("/admin/")({
-  head: () => ({ meta: [{ title: "لوحة الإدارة — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "لوحة الإدارة — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["admin", "developer"]}>
       <AdminPage />
@@ -72,7 +72,7 @@ function AdminPage() {
       <StaffNav />
       <main className="mx-auto max-w-[1440px] px-4 py-6 lg:px-6 lg:py-8 space-y-6">
         <header className="text-end">
-          <p className="text-xs font-bold text-primary">أزرق ماركت</p>
+          <p className="text-xs font-bold text-primary">Zone Mart</p>
           <h1 className="font-display text-3xl font-bold mt-1">لوحة المشرف</h1>
           <p className="text-xs font-semibold text-muted-foreground mt-1">نظرة سريعة على الطلبات والبيع وحركة الشغل.</p>
         </header>
@@ -163,7 +163,7 @@ function AdminPage() {
 
 function AnnouncementForm() {
   const qc = useQueryClient();
-  const [title, setTitle] = useState("أزرق ماركت");
+  const [title, setTitle] = useState("Zone Mart");
   const [body, setBody] = useState("طلباتك أوامر");
   const [active, setActive] = useState(true);
 

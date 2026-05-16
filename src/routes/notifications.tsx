@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/notifications")({
   head: () => ({
     meta: [
-      { title: "الإشعارات — أزرق ماركت" },
-      { name: "description", content: "تابع تحديثات طلباتك وعروض أزرق ماركت من مكان واحد عبر مركز الإشعارات." },
-      { property: "og:title", content: "الإشعارات — أزرق ماركت" },
-      { property: "og:description", content: "تحديثات طلباتك وعروض أزرق ماركت في مكان واحد." },
+      { title: "الإشعارات — Zone Mart" },
+      { name: "description", content: "تابع تحديثات طلباتك وعروض Zone Mart من مكان واحد عبر مركز الإشعارات." },
+      { property: "og:title", content: "الإشعارات — Zone Mart" },
+      { property: "og:description", content: "تحديثات طلباتك وعروض Zone Mart في مكان واحد." },
       { property: "og:url", content: "https://azraqmart.lovable.app/notifications" },
       { property: "og:type", content: "website" },
     ],

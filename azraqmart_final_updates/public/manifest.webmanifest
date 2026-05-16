@@ -1,0 +1,28 @@
+{
+  "name": "أزرق ماركت — تجارة الجملة",
+  "short_name": "أزرق ماركت",
+  "description": "منصة B2B متكاملة لتجار الجملة في مصر",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1f3a",
+  "theme_color": "#0f1f3a",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["business", "shopping", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "192x192 256x256 384x384 512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

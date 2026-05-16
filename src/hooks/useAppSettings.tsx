@@ -36,14 +36,11 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  // Apply theme dynamically
+  // Theme colors are defined in styles.css — no dynamic override needed.
+  // The developer panel can update app_settings but colors are baked into the CSS build.
   useEffect(() => {
     if (!data || typeof document === "undefined") return;
-    const root = document.documentElement;
-    if (data.primary_color) root.style.setProperty("--primary", data.primary_color);
-    if (data.accent_color) root.style.setProperty("--accent", data.accent_color);
-    if (data.background_color) root.style.setProperty("--background", data.background_color);
-    if (data.font_family) root.style.setProperty("--font-sans", data.font_family);
+    // Only set title
     if (data.app_name) document.title = data.app_name;
   }, [data]);
 

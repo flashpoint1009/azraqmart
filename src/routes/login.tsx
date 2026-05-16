@@ -13,10 +13,10 @@ import warehouseHero from "@/assets/warehouse-hero.jpg";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — أزرق ماركت" },
-      { name: "description", content: "ادخل إلى حساب تاجر الجملة الخاص بك على أزرق ماركت لمتابعة طلباتك وعروضك الحصرية." },
-      { property: "og:title", content: "تسجيل الدخول — أزرق ماركت" },
-      { property: "og:description", content: "ادخل إلى حسابك على أزرق ماركت لمتابعة طلبات الجملة." },
+      { title: "تسجيل الدخول — Zone Mart" },
+      { name: "description", content: "سجّل دخولك على Zone Mart عشان تطلب احتياجاتك وتتابع طلباتك." },
+      { property: "og:title", content: "تسجيل الدخول — Zone Mart" },
+      { property: "og:description", content: "سجّل دخولك على Zone Mart وابدأ تسوّق." },
       { property: "og:url", content: "https://azraqmart.lovable.app/login" },
       { property: "og:type", content: "website" },
     ],
@@ -46,21 +46,13 @@ type BannerSettings = {
 
 const FALLBACK: BannerSettings = {
   is_visible: true,
-  badge_label: "منصة موردين معتمدين",
-  badge_title: "أزرق ماركت",
-  hero_title: "شريكك في تجارة",
-  hero_highlight: "الجملة",
-  hero_subtitle: "نوفّر لتجار الجملة كتالوج منظّم، أسعار واضحة، وتسليم في مواعيده.",
-  features: [
-    { icon: "Truck", title: "توصيل في مواعيده", desc: "تغطية لمحافظات الدلتا والقاهرة الكبرى" },
-    { icon: "Receipt", title: "فاتورة ضريبية معتمدة", desc: "متوافقة مع مصلحة الضرائب المصرية" },
-    { icon: "ShieldCheck", title: "موردين معتمدين", desc: "تعامل مع موردين ووكلاء رسميين فقط" },
-  ],
-  stats: [
-    { value: "12K+", label: "منتج" },
-    { value: "450+", label: "مورد معتمد" },
-    { value: "8K+", label: "تاجر شريك" },
-  ],
+  badge_label: "",
+  badge_title: "",
+  hero_title: "",
+  hero_highlight: "",
+  hero_subtitle: "",
+  features: [],
+  stats: [],
 };
 
 function LoginPage() {
@@ -252,7 +244,7 @@ function LoginPage() {
           <div className="w-full max-w-sm animate-float-up rounded-3xl bg-white/15 dark:bg-white/10 backdrop-blur-2xl backdrop-saturate-150 border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-4 sm:p-6 lg:bg-transparent lg:border-0 lg:shadow-none lg:backdrop-blur-none lg:p-0 lg:rounded-none lg:max-w-md">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-2 px-3 py-1 text-[11px] font-bold text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-              للتجار وأصحاب المحلات
+              {banner.badge_label}
             </div>
             <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               {mode === "login" ? "أهلاً بيك" : "اعمل حساب جديد"}

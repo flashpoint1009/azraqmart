@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /developer
+Disallow: /accounting
+Disallow: /warehouse
+Disallow: /warehouse-advanced
+Disallow: /delivery
+Disallow: /account
+Disallow: /cart
+Disallow: /orders
+Disallow: /notifications
+
+Sitemap: https://azraqmart.com/sitemap.xml

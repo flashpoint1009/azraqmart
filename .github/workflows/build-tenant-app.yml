@@ -1,0 +1,391 @@
+# =============================================================================
+# Per-tenant mobile build pipeline (white-label SaaS).
+#
+# Implements task 15.3 of the white-label-saas-system spec.
+# Related tasks:
+#   - 15.1  parameterized capacitor.config.ts (reads TENANT_SLUG, TENANT_APP_NAME)
+#   - 15.2  X-Tenant-Slug fetch wrapper (reads VITE_TENANT_SLUG at build time)
+#   - 16.6  Super-Admin Console mobile-build trigger endpoint that dispatches
+#           this workflow via the GitHub REST API.
+#
+# Requirements covered: 9.1, 9.3, 9.4
+#   9.1  Per-tenant capacitor.config.ts (appId / appName / deep-link scheme)
+#   9.3  Generate icons + splash from the tenant logo via pwa-asset-generator
+#   9.4  Produce a signed APK / IPA, upload to the platform CDN, surface URL
+#
+# This workflow is intended to be triggered manually (or programmatically by
+# the Super-Admin Console). It is NOT exercised on every push. The platform
+# operator must wire up the secrets listed below before the first run.
+#
+# Required secrets (repository or environment scope):
+#   SUPABASE_URL                         platform Supabase project URL
+#   SUPABASE_SERVICE_ROLE_KEY            service-role key (server-side only)
+#   ANDROID_SIGNING_KEYSTORE_B64         base64-encoded keystore.jks
+#   ANDROID_KEYSTORE_PASSWORD            keystore password
+#   ANDROID_KEY_ALIAS                    signing key alias inside the keystore
+#   ANDROID_KEY_PASSWORD                 signing key password
+#   APPLE_CERT_P12_B64                   base64-encoded .p12 dist certificate
+#   APPLE_CERT_PASSWORD                  password for the .p12
+#   APPSTORE_PROVISION_PROFILE_B64       base64-encoded .mobileprovision
+#   KEYCHAIN_PASSWORD                    runner-only keychain password
+#   CDN_ACCESS_KEY_ID                    R2 / S3-compatible access key
+#   CDN_SECRET_ACCESS_KEY                R2 / S3-compatible secret
+#   CDN_ENDPOINT                         e.g. https://<acct>.r2.cloudflarestorage.com
+#   CDN_BUCKET                           bucket name, e.g. azraqmart-mobile-builds
+#
+# Required repository variable:
+#   CDN_PUBLIC_HOST                      e.g. cdn.azraqmart.app
+# =============================================================================
+
+name: Build Tenant Mobile App
+
+on:
+  workflow_dispatch:
+    inputs:
+      tenant_slug:
+        description: 'Tenant slug (kebab-case)'
+        required: true
+        type: string
+      target:
+        description: 'Mobile target'
+        required: true
+        type: choice
+        options:
+          - android
+          - ios
+        default: android
+      tenant_app_name:
+        description: 'Override app name (defaults to capitalized slug)'
+        required: false
+        type: string
+
+# Prevent two concurrent builds for the same (tenant, target) pair from
+# clobbering each other in the build directories or in the CDN object key.
+concurrency:
+  group: mobile-build-${{ inputs.tenant_slug }}-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # setup: common preamble shared by every platform job.
+  #
+  # - fetches this tenant's branding row from Supabase
+  # - generates icons + splash via pwa-asset-generator (requirement 9.3)
+  # - injects per-tenant env so capacitor.config.ts (task 15.1) and the
+  #   X-Tenant-Slug fetch wrapper (task 15.2) pick the right values
+  # - builds the web bundle and runs `cap sync`
+  # - uploads the prepared workspace as an artifact for the platform job
+  # ---------------------------------------------------------------------------
+  setup:
+    name: Prepare tenant build
+    runs-on: ubuntu-latest
+    outputs:
+      tenant_app_name: ${{ steps.appname.outputs.name }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Requirement 9.1: pull the tenant's branding (logo, colors, name) from
+      # Supabase using the platform service-role key so we can stamp the build.
+      - name: Fetch tenant branding
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TENANT_SLUG: ${{ inputs.tenant_slug }}
+        run: |
+          node -e "
+            (async () => {
+              const { createClient } = require('@supabase/supabase-js');
+              const c = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+              const { data: t } = await c.from('tenants').select('id,slug,name').eq('slug', process.env.TENANT_SLUG).single();
+              if (!t) { console.error('Tenant not found'); process.exit(1); }
+              const { data: b } = await c.from('tenant_branding').select('logo_url,primary_color').eq('tenant_id', t.id).single();
+              require('fs').writeFileSync('tenant-branding.json', JSON.stringify({ tenant: t, branding: b }, null, 2));
+            })();
+          "
+
+      - name: Resolve tenant app name
+        id: appname
+        run: |
+          NAME="${{ inputs.tenant_app_name }}"
+          if [ -z "$NAME" ]; then NAME="Azraqmart"; fi
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      # Requirement 9.3: generate per-tenant icons + splash from the logo.
+      - name: Generate icons and splash with pwa-asset-generator
+        run: |
+          npm install -g pwa-asset-generator
+          LOGO_URL="$(node -e "const j=require('./tenant-branding.json'); process.stdout.write((j.branding && j.branding.logo_url) || '')")"
+          if [ -z "$LOGO_URL" ]; then
+            echo "::warning::tenant has no logo_url, falling back to repo logo"
+            LOGO_SRC="public/icon-512.png"
+          else
+            curl -fsSL "$LOGO_URL" -o tenant-logo.png
+            LOGO_SRC="tenant-logo.png"
+          fi
+          mkdir -p public/icons public/splash
+          pwa-asset-generator "$LOGO_SRC" public/icons --icon-only --type png --opaque false || true
+          pwa-asset-generator "$LOGO_SRC" public/splash --splash-only --type png --opaque true || true
+
+      # Tasks 15.1 (capacitor.config.ts) and 15.2 (X-Tenant-Slug header) read
+      # these env variables to produce a tenant-specific build.
+      - name: Inject tenant env
+        run: |
+          echo "TENANT_SLUG=${{ inputs.tenant_slug }}" >> "$GITHUB_ENV"
+          echo "TENANT_APP_NAME=${{ steps.appname.outputs.name }}" >> "$GITHUB_ENV"
+          echo "VITE_TENANT_SLUG=${{ inputs.tenant_slug }}" >> "$GITHUB_ENV"
+
+      - name: Build web bundle
+        env:
+          TENANT_SLUG: ${{ inputs.tenant_slug }}
+          TENANT_APP_NAME: ${{ steps.appname.outputs.name }}
+          VITE_TENANT_SLUG: ${{ inputs.tenant_slug }}
+        run: npm run build
+
+      - name: Capacitor sync
+        env:
+          TENANT_SLUG: ${{ inputs.tenant_slug }}
+          TENANT_APP_NAME: ${{ steps.appname.outputs.name }}
+        run: npx cap sync
+
+      - name: Upload prepared workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenant-build-${{ inputs.tenant_slug }}-${{ github.run_id }}
+          path: |
+            dist/**
+            android/**
+            ios/**
+            public/**
+            tenant-branding.json
+            capacitor.config.ts
+            package.json
+            package-lock.json
+          retention-days: 7
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # android: assemble release APK, zipalign + sign, push to the platform CDN.
+  # Requirements: 9.1, 9.3, 9.4
+  # ---------------------------------------------------------------------------
+  android:
+    name: Build Android APK
+    needs: setup
+    if: inputs.target == 'android'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Download prepared workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: tenant-build-${{ inputs.tenant_slug }}-${{ github.run_id }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Decode signing keystore
+        env:
+          ANDROID_SIGNING_KEYSTORE_B64: ${{ secrets.ANDROID_SIGNING_KEYSTORE_B64 }}
+        run: |
+          mkdir -p "$HOME/.signing"
+          echo "$ANDROID_SIGNING_KEYSTORE_B64" | base64 -d > "$HOME/.signing/keystore.jks"
+
+      - name: Assemble release APK
+        env:
+          TENANT_SLUG: ${{ inputs.tenant_slug }}
+          TENANT_APP_NAME: ${{ needs.setup.outputs.tenant_app_name }}
+          VITE_TENANT_SLUG: ${{ inputs.tenant_slug }}
+        run: |
+          chmod +x android/gradlew
+          (cd android && ./gradlew assembleRelease --no-daemon)
+
+      - name: Zipalign and sign APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -n1)"
+          OUT_DIR="android/app/build/outputs/apk/release"
+          UNSIGNED="$OUT_DIR/app-release-unsigned.apk"
+          ALIGNED="$OUT_DIR/app-release-aligned.apk"
+          SIGNED="$OUT_DIR/app-release.apk"
+          if [ -f "$UNSIGNED" ]; then
+            "$BUILD_TOOLS/zipalign" -v -p 4 "$UNSIGNED" "$ALIGNED"
+            "$BUILD_TOOLS/apksigner" sign \
+              --ks "$HOME/.signing/keystore.jks" \
+              --ks-pass "pass:$ANDROID_KEYSTORE_PASSWORD" \
+              --ks-key-alias "$ANDROID_KEY_ALIAS" \
+              --key-pass "pass:$ANDROID_KEY_PASSWORD" \
+              --out "$SIGNED" \
+              "$ALIGNED"
+          fi
+          "$BUILD_TOOLS/apksigner" verify "$SIGNED"
+
+      # Requirement 9.4: upload the signed artifact to the platform CDN
+      # (Cloudflare R2 / S3-compatible) so the Super-Admin Console (task 16.6)
+      # can hand the tenant a download URL.
+      - name: Upload APK to platform CDN
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CDN_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CDN_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          CDN_ENDPOINT: ${{ secrets.CDN_ENDPOINT }}
+          CDN_BUCKET: ${{ secrets.CDN_BUCKET }}
+        run: |
+          aws s3 cp \
+            android/app/build/outputs/apk/release/app-release.apk \
+            "s3://${CDN_BUCKET}/mobile-builds/${{ inputs.tenant_slug }}/${{ github.run_id }}/app-release.apk" \
+            --endpoint-url "$CDN_ENDPOINT" \
+            --acl public-read \
+            --content-type application/vnd.android.package-archive
+
+      - name: Publish download URL
+        run: |
+          {
+            echo "## Android build complete"
+            echo ""
+            echo "- Tenant: \`${{ inputs.tenant_slug }}\`"
+            echo "- Run id: \`${{ github.run_id }}\`"
+            echo "- Download URL: https://${{ vars.CDN_PUBLIC_HOST }}/mobile-builds/${{ inputs.tenant_slug }}/${{ github.run_id }}/app-release.apk"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------------------
+  # ios: archive + export signed IPA, push to the platform CDN.
+  # Requirements: 9.1, 9.3, 9.4
+  # ---------------------------------------------------------------------------
+  ios:
+    name: Build iOS IPA
+    needs: setup
+    if: inputs.target == 'ios'
+    runs-on: macos-14
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Download prepared workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: tenant-build-${{ inputs.tenant_slug }}-${{ github.run_id }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install CocoaPods dependencies
+        run: |
+          if [ -d ios/App ]; then
+            (cd ios/App && pod install --repo-update)
+          fi
+
+      - name: Import signing certificate
+        env:
+          APPLE_CERT_P12_B64: ${{ secrets.APPLE_CERT_P12_B64 }}
+          APPLE_CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          CERT_PATH="$RUNNER_TEMP/apple-cert.p12"
+          echo "$APPLE_CERT_P12_B64" | base64 -d > "$CERT_PATH"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$APPLE_CERT_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+
+      - name: Install provisioning profile
+        env:
+          APPSTORE_PROVISION_PROFILE_B64: ${{ secrets.APPSTORE_PROVISION_PROFILE_B64 }}
+        run: |
+          PROFILES_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PROFILES_DIR"
+          echo "$APPSTORE_PROVISION_PROFILE_B64" | base64 -d > "$PROFILES_DIR/tenant.mobileprovision"
+
+      - name: Archive iOS app
+        env:
+          TENANT_SLUG: ${{ inputs.tenant_slug }}
+          TENANT_APP_NAME: ${{ needs.setup.outputs.tenant_app_name }}
+          VITE_TENANT_SLUG: ${{ inputs.tenant_slug }}
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -destination "generic/platform=iOS" \
+            archive
+
+      - name: Export IPA
+        run: |
+          printf '%s\n' \
+            '<?xml version="1.0" encoding="UTF-8"?>' \
+            '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
+            '<plist version="1.0">' \
+            '<dict>' \
+            '  <key>method</key>' \
+            '  <string>app-store</string>' \
+            '  <key>signingStyle</key>' \
+            '  <string>manual</string>' \
+            '</dict>' \
+            '</plist>' \
+            > "$RUNNER_TEMP/exportOptions.plist"
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$RUNNER_TEMP/exportOptions.plist"
+
+      # Requirement 9.4: upload the signed artifact to the platform CDN.
+      - name: Upload IPA to platform CDN
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CDN_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CDN_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          CDN_ENDPOINT: ${{ secrets.CDN_ENDPOINT }}
+          CDN_BUCKET: ${{ secrets.CDN_BUCKET }}
+        run: |
+          IPA_PATH="$(ls "$RUNNER_TEMP/export"/*.ipa | head -n 1)"
+          aws s3 cp \
+            "$IPA_PATH" \
+            "s3://${CDN_BUCKET}/mobile-builds/${{ inputs.tenant_slug }}/${{ github.run_id }}/App.ipa" \
+            --endpoint-url "$CDN_ENDPOINT" \
+            --acl public-read \
+            --content-type application/octet-stream
+
+      - name: Publish download URL
+        run: |
+          {
+            echo "## iOS build complete"
+            echo ""
+            echo "- Tenant: \`${{ inputs.tenant_slug }}\`"
+            echo "- Run id: \`${{ github.run_id }}\`"
+            echo "- Download URL: https://${{ vars.CDN_PUBLIC_HOST }}/mobile-builds/${{ inputs.tenant_slug }}/${{ github.run_id }}/App.ipa"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,16 +1,16 @@
 {
-  "name": "أزرق ماركت — تجارة الجملة",
-  "short_name": "أزرق ماركت",
-  "description": "منصة B2B متكاملة لتجار الجملة في مصر",
+  "name": "Zone Mart — سوبر ماركت أونلاين",
+  "short_name": "Zone Mart",
+  "description": "اطلب احتياجاتك اليومية وتوصلك لحد بيتك",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0f1f3a",
-  "theme_color": "#0f1f3a",
+  "background_color": "#1a3d2e",
+  "theme_color": "#1a3d2e",
   "lang": "ar",
   "dir": "rtl",
-  "categories": ["business", "shopping", "productivity"],
+  "categories": ["shopping", "food"],
   "icons": [
     {
       "src": "/icon-512.png",

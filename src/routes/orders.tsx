@@ -10,10 +10,10 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/orders")({
   head: () => ({
     meta: [
-      { title: "طلباتي — أزرق ماركت" },
-      { name: "description", content: "تابع حالة طلباتك من أزرق ماركت لحظة بلحظة من قيد المراجعة وحتى التسليم." },
-      { property: "og:title", content: "طلباتي — أزرق ماركت" },
-      { property: "og:description", content: "تابع حالة طلبات الجملة الخاصة بك على أزرق ماركت." },
+      { title: "طلباتي — Zone Mart" },
+      { name: "description", content: "تابع حالة طلباتك من Zone Mart لحظة بلحظة من قيد المراجعة وحتى التسليم." },
+      { property: "og:title", content: "طلباتي — Zone Mart" },
+      { property: "og:description", content: "تابع حالة طلبات الجملة الخاصة بك على Zone Mart." },
       { property: "og:url", content: "https://azraqmart.lovable.app/orders" },
       { property: "og:type", content: "website" },
     ],

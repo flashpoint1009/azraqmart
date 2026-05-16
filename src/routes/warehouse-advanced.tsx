@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/warehouse-advanced")({
-  head: () => ({ meta: [{ title: "إدارة المخزن المتقدمة — أزرق ماركت" }] }),
+  head: () => ({ meta: [{ title: "إدارة المخزن المتقدمة — Zone Mart" }] }),
   component: () => (
     <RoleGuard allow={["warehouse", "admin", "developer"]}>
       <Page />
