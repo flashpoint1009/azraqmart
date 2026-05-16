@@ -43,6 +43,7 @@ import { Route as AdminDebtsRouteImport } from './routes/admin.debts'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminChatbotRouteImport } from './routes/admin.chatbot'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminBrandingRouteImport } from './routes/admin.branding'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as AdminAboutRouteImport } from './routes/admin.about'
 import { Route as AccountPasswordRouteImport } from './routes/account.password'
@@ -225,6 +226,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/admin/categories',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBrandingRoute = AdminBrandingRouteImport.update({
+  id: '/admin/branding',
+  path: '/admin/branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBannersRoute = AdminBannersRouteImport.update({
   id: '/admin/banners',
   path: '/admin/banners',
@@ -303,6 +309,7 @@ export interface FileRoutesByFullPath {
   '/account/password': typeof AccountPasswordRoute
   '/admin/about': typeof AdminAboutRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/chatbot': typeof AdminChatbotRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
@@ -350,6 +357,7 @@ export interface FileRoutesByTo {
   '/account/password': typeof AccountPasswordRoute
   '/admin/about': typeof AdminAboutRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/chatbot': typeof AdminChatbotRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
@@ -398,6 +406,7 @@ export interface FileRoutesById {
   '/account/password': typeof AccountPasswordRoute
   '/admin/about': typeof AdminAboutRoute
   '/admin/banners': typeof AdminBannersRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/chatbot': typeof AdminChatbotRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
@@ -447,6 +456,7 @@ export interface FileRouteTypes {
     | '/account/password'
     | '/admin/about'
     | '/admin/banners'
+    | '/admin/branding'
     | '/admin/categories'
     | '/admin/chatbot'
     | '/admin/customers'
@@ -494,6 +504,7 @@ export interface FileRouteTypes {
     | '/account/password'
     | '/admin/about'
     | '/admin/banners'
+    | '/admin/branding'
     | '/admin/categories'
     | '/admin/chatbot'
     | '/admin/customers'
@@ -541,6 +552,7 @@ export interface FileRouteTypes {
     | '/account/password'
     | '/admin/about'
     | '/admin/banners'
+    | '/admin/branding'
     | '/admin/categories'
     | '/admin/chatbot'
     | '/admin/customers'
@@ -588,6 +600,7 @@ export interface RootRouteChildren {
   WarehouseAdvancedRoute: typeof WarehouseAdvancedRoute
   AdminAboutRoute: typeof AdminAboutRoute
   AdminBannersRoute: typeof AdminBannersRoute
+  AdminBrandingRoute: typeof AdminBrandingRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminChatbotRoute: typeof AdminChatbotRoute
   AdminCustomersRoute: typeof AdminCustomersRouteWithChildren
@@ -850,6 +863,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/branding': {
+      id: '/admin/branding'
+      path: '/admin/branding'
+      fullPath: '/admin/branding'
+      preLoaderRoute: typeof AdminBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/banners': {
       id: '/admin/banners'
       path: '/admin/banners'
@@ -1023,6 +1043,7 @@ const rootRouteChildren: RootRouteChildren = {
   WarehouseAdvancedRoute: WarehouseAdvancedRoute,
   AdminAboutRoute: AdminAboutRoute,
   AdminBannersRoute: AdminBannersRoute,
+  AdminBrandingRoute: AdminBrandingRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminChatbotRoute: AdminChatbotRoute,
   AdminCustomersRoute: AdminCustomersRouteWithChildren,
